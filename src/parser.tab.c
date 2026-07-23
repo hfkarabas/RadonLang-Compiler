@@ -541,8 +541,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    26,    26,    30,    31,    35,    36,    40,    47,    54,
-      58,    59,    60,    61,    62,    63
+       0,    26,    26,    30,    31,    35,    36,    40,    44,    48,
+      52,    53,    54,    55,    56,    57
 };
 #endif
 
@@ -1117,32 +1117,16 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 7: /* declaration: INT IDENTIFIER ASSIGN expression SEMICOLON  */
-#line 41 "parser.y"
-      {
-          printf("Valid declaration!\n");
-      }
-#line 1126 "parser.tab.c"
-    break;
-
-  case 8: /* assignment: IDENTIFIER ASSIGN expression SEMICOLON  */
-#line 48 "parser.y"
-      {
-          printf("Valid assignment!\n");
-      }
-#line 1134 "parser.tab.c"
-    break;
-
   case 9: /* expression: NUMBER  */
-#line 55 "parser.y"
+#line 49 "parser.y"
     {
         printf("%d\n", (yyvsp[0].ival));
     }
-#line 1142 "parser.tab.c"
+#line 1126 "parser.tab.c"
     break;
 
 
-#line 1146 "parser.tab.c"
+#line 1130 "parser.tab.c"
 
       default: break;
     }
@@ -1335,7 +1319,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 66 "parser.y"
+#line 60 "parser.y"
 
 
 void yyerror(const char *s)

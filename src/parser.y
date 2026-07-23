@@ -38,16 +38,10 @@ statement
 
 declaration
     : INT IDENTIFIER ASSIGN expression SEMICOLON
-      {
-          printf("Valid declaration!\n");
-      }
     ;
 
 assignment
     : IDENTIFIER ASSIGN expression SEMICOLON
-      {
-          printf("Valid assignment!\n");
-      }
     ;
 
 expression
