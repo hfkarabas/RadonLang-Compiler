@@ -90,8 +90,10 @@ extern int yydebug;
     COMMA = 291,                   /* COMMA  */
     INC = 292,                     /* INC  */
     DEC = 293,                     /* DEC  */
-    NUMBER = 294,                  /* NUMBER  */
-    IDENTIFIER = 295               /* IDENTIFIER  */
+    PRINT = 294,                   /* PRINT  */
+    NUMBER = 295,                  /* NUMBER  */
+    IDENTIFIER = 296,              /* IDENTIFIER  */
+    STRING = 297                   /* STRING  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -100,12 +102,12 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 14 "parser.y"
+#line 16 "parser.y"
 
     int ival;
     char *sval;
 
-#line 109 "parser.tab.h"
+#line 111 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

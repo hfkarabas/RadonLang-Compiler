@@ -11,6 +11,8 @@ void yyerror(const char *s);
 %token CASE DEFAULT IF SWITCH ELSE FOR DO WHILE GOTO CONTINUE BREAK RETURN SIZEOF
 %token EQUAL NEQUAL GEQUAL LEQUAL GREATER LESSTHAN
 %token AND OR NOT COMMA INC DEC
+%token PRINT
+
 %union {
     int ival;
     char *sval;
@@ -18,6 +20,7 @@ void yyerror(const char *s);
 
 %token <ival> NUMBER
 %token <sval> IDENTIFIER
+%token <sval> STRING
 %left PLUS MINUS
 %left TIMES DIVIDE
 
@@ -34,6 +37,7 @@ statements
 statement
     : declaration
     | assignment
+    | print_statement
     ;
 
 declaration
@@ -57,6 +61,13 @@ expression
     | LPAREN expression RPAREN
     ;
 
+print_statement
+    : PRINT LPAREN STRING RPAREN SEMICOLON
+      {
+          printf("Print statement parsed: %s\n", $3);
+      }
+    ;
+
 %%
 
 void yyerror(const char *s)
@@ -66,9 +77,9 @@ void yyerror(const char *s)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 2)
+    if (argc != 3)
     {
-        printf("Usage: %s <input_file>\n", argv[0]);
+        printf("Usage: %s <input_file> <output_file>\n", argv[0]);
         return 1;
     }
 
@@ -76,12 +87,24 @@ int main(int argc, char *argv[])
 
     if (yyin == NULL)
     {
-        perror("Cannot open input file");
+        perror("Input file name is null");
+        return 1;
+    }
+
+    FILE *output = fopen(argv[2], "w");
+
+    if (output == NULL)
+    {
+        perror("Output file name is null");
+        fclose(yyin);
         return 1;
     }
 
     yyparse();
 
+    fprintf(output, "It works\n");
+
+    fclose(output);
     fclose(yyin);
 
     return 0;
