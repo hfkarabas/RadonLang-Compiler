@@ -55,23 +55,60 @@ extern int yydebug;
     YYerror = 256,                 /* error  */
     YYUNDEF = 257,                 /* "invalid token"  */
     INT = 258,                     /* INT  */
-    IDENTIFIER = 259,              /* IDENTIFIER  */
-    NUMBER = 260,                  /* NUMBER  */
-    ASSIGN = 261,                  /* ASSIGN  */
-    SEMICOLON = 262,               /* SEMICOLON  */
-    PLUS = 263,                    /* PLUS  */
-    MINUS = 264,                   /* MINUS  */
-    TIMES = 265,                   /* TIMES  */
-    DIVIDE = 266,                  /* DIVIDE  */
-    LPAREN = 267,                  /* LPAREN  */
-    RPAREN = 268                   /* RPAREN  */
+    ASSIGN = 259,                  /* ASSIGN  */
+    SEMICOLON = 260,               /* SEMICOLON  */
+    PLUS = 261,                    /* PLUS  */
+    MINUS = 262,                   /* MINUS  */
+    TIMES = 263,                   /* TIMES  */
+    DIVIDE = 264,                  /* DIVIDE  */
+    LPAREN = 265,                  /* LPAREN  */
+    RPAREN = 266,                  /* RPAREN  */
+    LBRACE = 267,                  /* LBRACE  */
+    RBRACE = 268,                  /* RBRACE  */
+    CASE = 269,                    /* CASE  */
+    DEFAULT = 270,                 /* DEFAULT  */
+    IF = 271,                      /* IF  */
+    SWITCH = 272,                  /* SWITCH  */
+    ELSE = 273,                    /* ELSE  */
+    FOR = 274,                     /* FOR  */
+    DO = 275,                      /* DO  */
+    WHILE = 276,                   /* WHILE  */
+    GOTO = 277,                    /* GOTO  */
+    CONTINUE = 278,                /* CONTINUE  */
+    BREAK = 279,                   /* BREAK  */
+    RETURN = 280,                  /* RETURN  */
+    SIZEOF = 281,                  /* SIZEOF  */
+    EQUAL = 282,                   /* EQUAL  */
+    NEQUAL = 283,                  /* NEQUAL  */
+    GEQUAL = 284,                  /* GEQUAL  */
+    LEQUAL = 285,                  /* LEQUAL  */
+    GREATER = 286,                 /* GREATER  */
+    LESSTHAN = 287,                /* LESSTHAN  */
+    AND = 288,                     /* AND  */
+    OR = 289,                      /* OR  */
+    NOT = 290,                     /* NOT  */
+    COMMA = 291,                   /* COMMA  */
+    INC = 292,                     /* INC  */
+    DEC = 293,                     /* DEC  */
+    NUMBER = 294,                  /* NUMBER  */
+    IDENTIFIER = 295               /* IDENTIFIER  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+union YYSTYPE
+{
+#line 14 "parser.y"
+
+    int ival;
+    char *sval;
+
+#line 109 "parser.tab.h"
+
+};
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
