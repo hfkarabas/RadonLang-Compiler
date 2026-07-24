@@ -69,14 +69,21 @@
 /* First part of user prologue.  */
 #line 1 "parser.y"
 
-#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <filesystem>
+#include <cstdlib>
+#include <cstdio>
+
+using namespace std;
 
 extern int yylex();
 extern FILE *yyin;
-
 void yyerror(const char *s);
+FILE *code_out;
 
-#line 80 "parser.tab.c"
+#line 87 "parser.tab.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -99,7 +106,7 @@ void yyerror(const char *s);
 #  endif
 # endif
 
-#include "parser.tab.h"
+#include "parser.tab.hpp"
 /* Symbol kind.  */
 enum yysymbol_kind_t
 {
@@ -544,8 +551,8 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    29,    29,    33,    34,    38,    39,    40,    44,    48,
-      52,    56,    57,    58,    59,    60,    61,    65
+       0,    36,    36,    40,    41,    45,    46,    47,    51,    55,
+      59,    63,    64,    65,    66,    67,    68,    72
 };
 #endif
 
@@ -1125,23 +1132,23 @@ yyreduce:
   switch (yyn)
     {
   case 10: /* expression: NUMBER  */
-#line 53 "parser.y"
+#line 60 "parser.y"
     {
         printf("%d\n", (yyvsp[0].ival));
     }
-#line 1133 "parser.tab.c"
+#line 1140 "parser.tab.cpp"
     break;
 
   case 17: /* print_statement: PRINT LPAREN STRING RPAREN SEMICOLON  */
-#line 66 "parser.y"
+#line 73 "parser.y"
       {
-          printf("Print statement parsed: %s\n", (yyvsp[-2].sval));
+          fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", (yyvsp[-2].sval));
       }
-#line 1141 "parser.tab.c"
+#line 1148 "parser.tab.cpp"
     break;
 
 
-#line 1145 "parser.tab.c"
+#line 1152 "parser.tab.cpp"
 
       default: break;
     }
@@ -1334,45 +1341,10 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 71 "parser.y"
+#line 78 "parser.y"
 
 
 void yyerror(const char *s)
 {
     printf("Syntax Error!\n");
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc != 3)
-    {
-        printf("Usage: %s <input_file> <output_file>\n", argv[0]);
-        return 1;
-    }
-
-    yyin = fopen(argv[1], "r");
-
-    if (yyin == NULL)
-    {
-        perror("Input file name is null");
-        return 1;
-    }
-
-    FILE *output = fopen(argv[2], "w");
-
-    if (output == NULL)
-    {
-        perror("Output file name is null");
-        fclose(yyin);
-        return 1;
-    }
-
-    yyparse();
-
-    fprintf(output, "It works\n");
-
-    fclose(output);
-    fclose(yyin);
-
-    return 0;
 }

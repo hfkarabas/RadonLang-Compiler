@@ -1,10 +1,17 @@
 %{
-#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <filesystem>
+#include <cstdlib>
+#include <cstdio>
+
+using namespace std;
 
 extern int yylex();
 extern FILE *yyin;
-
 void yyerror(const char *s);
+FILE *code_out;
 %}
 
 %token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
@@ -64,7 +71,7 @@ expression
 print_statement
     : PRINT LPAREN STRING RPAREN SEMICOLON
       {
-          printf("Print statement parsed: %s\n", $3);
+          fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
       }
     ;
 
@@ -73,39 +80,4 @@ print_statement
 void yyerror(const char *s)
 {
     printf("Syntax Error!\n");
-}
-
-int main(int argc, char *argv[])
-{
-    if (argc != 3)
-    {
-        printf("Usage: %s <input_file> <output_file>\n", argv[0]);
-        return 1;
-    }
-
-    yyin = fopen(argv[1], "r");
-
-    if (yyin == NULL)
-    {
-        perror("Input file name is null");
-        return 1;
-    }
-
-    FILE *output = fopen(argv[2], "w");
-
-    if (output == NULL)
-    {
-        perror("Output file name is null");
-        fclose(yyin);
-        return 1;
-    }
-
-    yyparse();
-
-    fprintf(output, "It works\n");
-
-    fclose(output);
-    fclose(yyin);
-
-    return 0;
 }

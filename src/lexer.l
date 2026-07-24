@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>   // atoi
 #include <string.h>   // strdup
-#include "parser.tab.h"
+#include "parser.tab.hpp"
 %}
 
 %%
@@ -48,7 +48,7 @@
 "print" {return PRINT;}
 \"([^\\\"]|\\.)*\" {
     yytext[yyleng - 1] = '\0';
-    yylval.sval = strdup(yytext + 1);
+    yylval.sval = strdup(yytext + 1);   
     return STRING;
 }
 [0-9]+ {yylval.ival = atoi(yytext); return NUMBER;}

@@ -1,5 +1,6 @@
+#line 1 "lex.yy.cpp"
 
-#line 2 "lex.yy.c"
+#line 3 "lex.yy.cpp"
 
 #define  YY_INT_ALIGNED short int
 
@@ -515,9 +516,9 @@ char *yytext;
 #include <stdio.h>
 #include <stdlib.h>   // atoi
 #include <string.h>   // strdup
-#include "parser.tab.h"
-#line 519 "lex.yy.c"
-#line 520 "lex.yy.c"
+#include "parser.tab.hpp"
+#line 520 "lex.yy.cpp"
+#line 521 "lex.yy.cpp"
 
 #define INITIAL 0
 
@@ -737,7 +738,7 @@ YY_DECL
 #line 10 "lexer.l"
 
 
-#line 740 "lex.yy.c"
+#line 741 "lex.yy.cpp"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -985,7 +986,7 @@ YY_RULE_SETUP
 #line 49 "lexer.l"
 {
     yytext[yyleng - 1] = '\0';
-    yylval.sval = strdup(yytext + 1);
+    yylval.sval = strdup(yytext + 1);   
     return STRING;
 }
 	YY_BREAK
@@ -1015,7 +1016,7 @@ YY_RULE_SETUP
 #line 59 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 1018 "lex.yy.c"
+#line 1019 "lex.yy.cpp"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
