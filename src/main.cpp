@@ -12,6 +12,12 @@ extern int yyparse();
 
 int main(int argc, char *argv[])
 {
+    std::filesystem::path inputPath(argv[1]);
+
+    if(inputPath.extension() != ".rn"){
+        std::cerr << "Error: Only \".rn\" source files are supported." << std::endl;
+    }
+
     if (argc<2)
     {
         std::cout << "Usage:" << argv[0] << "<input_file> [output_name]\n";
@@ -65,7 +71,6 @@ int main(int argc, char *argv[])
     fclose(yyin);
 
     std::string command = "gcc \"" + tempFile + "\" -o \"" + outputPath +"\"";
-    std::cout << command << std::endl;
     int result = system(command.c_str());
 
     remove(tempFile.c_str());
