@@ -6,12 +6,12 @@
 #include <cstdlib>
 #include <cstdio>
 
-using namespace std;
+#include "symbolTable.h"
 
 extern int yylex();
 extern FILE *yyin;
 void yyerror(const char *s);
-FILE *code_out;
+extern std::ofstream code_out;
 %}
 
 %token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
@@ -28,6 +28,9 @@ FILE *code_out;
 %token <ival> NUMBER
 %token <sval> IDENTIFIER
 %token <sval> STRING
+
+%type <ival> expression
+
 %left PLUS MINUS
 %left TIMES DIVIDE
 
@@ -48,31 +51,47 @@ statement
     ;
 
 declaration
-    : INT IDENTIFIER ASSIGN expression SEMICOLON
+    : INT IDENTIFIER ASSIGN expression SEMICOLON{
+        symbolTable[$2].type = "int";
+        symbolTable[$2].data = std::to_string($4);
+        code_out << "int " << $2 << " = " << $4 << ";\n";
+    }
     ;
 
 assignment
-    : IDENTIFIER ASSIGN expression SEMICOLON
+    : IDENTIFIER ASSIGN expression SEMICOLON{
+        symbolTable[$1].data = std::to_string($3);
+        code_out << $1 << " = " << $3 << ";\n";
+    }
     ;
 
 expression
-    : NUMBER 
-    {
-        printf("%d\n", $1);
+    : NUMBER{
+        $$ = $1;
     }
-    | IDENTIFIER
+    | IDENTIFIER{
+        $$ = std::stoi(symbolTable[$1].data);
+    }
     | expression PLUS expression
     | expression MINUS expression
     | expression TIMES expression
     | expression DIVIDE expression
-    | LPAREN expression RPAREN
+    | LPAREN expression RPAREN{
+        $$ = $2;
+    }
     ;
 
 print_statement
     : PRINT LPAREN STRING RPAREN SEMICOLON
       {
-          fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
+         // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
+         code_out << "   printf(\"" << $3 << "\");\n";
+         code_out << "printf(\"\\n\");\n";
       }
+
+    | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
+        code_out << "printf(\"%d\\n\","<< $3 << ");\n";
+    }
     ;
 
 %%
