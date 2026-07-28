@@ -6,32 +6,29 @@
 #include <cstdio>
 #include <cerrno>
 
-#include "utils.h"
+#include "utils/utils.h"
+#include "cli/radoncli.h"
 
 extern FILE *yyin;
 std::ofstream code_out;
 
 extern int yyparse();
 
-const std::string ver = "0.1.0"; 
 int main(int argc, char *argv[])
 {
-    if (argc<2)
+    if (argc == 1)
     {
-        std::cout << "Try --help for more information.\n";
-        return 1;
+        showWelcome();
+        return 0;
     }
 
     if (std::string(argv[1]) == "--help"){
-        std::cout << "RadonLang Compiler v" << ver << "\n\n";
-        std::cout << "compiler.exe <input_file> [output_name]\n";
-        std::cout << "--version     Show compiler version\n";
-        std::cout << "--help        Show this help message\n";
+        showHelp();
         return 0;
     }
 
     if (std::string(argv[1]) == "--version"){
-        std::cout << "RadonLang Compiler v" << ver << "\n\n";
+        showVersion();
         return 0;
     }
 
@@ -39,6 +36,7 @@ int main(int argc, char *argv[])
 
     if(inputPath.extension() != ".rn"){
         printError("Only \".rn\" source files are supported.");
+        return 1;
     }
 
     
@@ -73,7 +71,7 @@ int main(int argc, char *argv[])
             std::filesystem::create_directories(outputPath.parent_path());
         }
 
-        std::filesystem::path tempFile = outputPath.parent_path()/"temp_out.c";
+        std::filesystem::path tempFile = outputPath.parent_path()/"temp_out.cpp";
        // std::string outputPath = "../bin/" + exeName;
 
     code_out.open(tempFile);
@@ -87,7 +85,8 @@ int main(int argc, char *argv[])
 
     code_out 
     <<"#include <stdio.h>\n"
-    <<"#include <stdlib.h>\n\n"
+    <<"#include <stdlib.h>\n"
+    <<"#include \"runtime.h\"\n\n"
     <<"int main()\n"
     <<"{\n";
     yyparse();
@@ -99,7 +98,7 @@ int main(int argc, char *argv[])
     code_out.close();
     fclose(yyin);
 
-    std::string command = "gcc \"" + tempFile.string() + "\" -o \"" + outputPath.string() +"\"";
+    std::string command = "g++ -I. \"" + tempFile.string() + "\" runtime.cpp -o \"" + outputPath.string() +"\"";
     int result = system(command.c_str());
     printSuccess("Compilation Successful!");
 

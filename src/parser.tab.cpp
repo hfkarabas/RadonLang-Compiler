@@ -489,16 +489,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  13
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   41
+#define YYLAST   45
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  43
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  8
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  18
+#define YYNRULES  19
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  39
+#define YYNSTATES  41
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   297
@@ -552,7 +552,7 @@ static const yytype_int8 yytranslate[] =
 static const yytype_int8 yyrline[] =
 {
        0,    39,    39,    43,    44,    48,    49,    50,    54,    62,
-      69,    72,    75,    76,    77,    78,    79,    85,    92
+      66,    75,    78,    81,    82,    83,    84,    85,    91,    99
 };
 #endif
 
@@ -599,10 +599,11 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,   -31,    19,    24,    30,    -3,   -39,   -39,   -39,   -39,
-      29,   -38,    -9,   -39,   -39,    -9,    23,    26,    -9,   -39,
-     -39,    13,    18,    34,    35,     0,   -39,    -9,    -9,    -9,
-      -9,   -39,   -39,   -39,   -39,     4,     4,   -39,   -39
+      -3,   -38,    27,    26,    10,    -3,   -39,   -39,   -39,   -39,
+      35,   -29,    -9,   -39,   -39,    -6,    29,    30,    -6,   -39,
+     -39,    37,    15,    20,    38,    39,     0,   -39,   -39,    -6,
+      -6,    -6,    -6,   -39,   -39,   -39,   -39,     6,     6,   -39,
+     -39
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -611,21 +612,22 @@ static const yytype_int8 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     0,     0,     2,     4,     5,     6,     7,
-       0,     0,     0,     1,     3,     0,     0,     0,     0,    10,
-      11,     0,     0,     0,     0,     0,     9,     0,     0,     0,
-       0,     8,    18,    17,    16,    12,    13,    14,    15
+       0,     0,     0,     1,     3,     0,     0,     0,     0,    11,
+      12,     0,     0,     0,     0,     0,     0,    10,     9,     0,
+       0,     0,     0,     8,    19,    18,    17,    13,    14,    15,
+      16
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -39,   -39,   -39,    36,   -39,   -39,   -13,   -39
+     -39,   -39,   -39,    40,   -39,   -39,   -13,   -39
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     4,     5,     6,     7,     8,    21,     9
+       0,     4,     5,     6,     7,     8,    22,     9
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -633,20 +635,20 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,    18,    22,    16,    17,    25,    27,    28,    29,    30,
-      10,    34,    29,    30,    35,    36,    37,    38,    26,    27,
-      28,    29,    30,    31,    27,    28,    29,    30,    12,    11,
-      13,    19,    20,    15,    23,     0,     2,    24,     3,    32,
-      33,    14
+       1,    18,    23,    10,    18,    26,    29,    30,    31,    32,
+      13,    36,    16,    17,    31,    32,    37,    38,    39,    40,
+      28,    29,    30,    31,    32,    33,    29,    30,    31,    32,
+      12,    19,    20,    21,    19,    20,     2,    11,     3,    15,
+      24,    25,    27,    34,    35,    14
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,    10,    15,    41,    42,    18,     6,     7,     8,     9,
-      41,    11,     8,     9,    27,    28,    29,    30,     5,     6,
-       7,     8,     9,     5,     6,     7,     8,     9,     4,    10,
-       0,    40,    41,     4,    11,    -1,    39,    11,    41,     5,
-       5,     5
+       3,    10,    15,    41,    10,    18,     6,     7,     8,     9,
+       0,    11,    41,    42,     8,     9,    29,    30,    31,    32,
+       5,     6,     7,     8,     9,     5,     6,     7,     8,     9,
+       4,    40,    41,    42,    40,    41,    39,    10,    41,     4,
+      11,    11,     5,     5,     5,     5
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -655,22 +657,23 @@ static const yytype_int8 yystos[] =
 {
        0,     3,    39,    41,    44,    45,    46,    47,    48,    50,
       41,    10,     4,     0,    46,     4,    41,    42,    10,    40,
-      41,    49,    49,    11,    11,    49,     5,     6,     7,     8,
-       9,     5,     5,     5,    11,    49,    49,    49,    49
+      41,    42,    49,    49,    11,    11,    49,     5,     5,     6,
+       7,     8,     9,     5,     5,     5,    11,    49,    49,    49,
+      49
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
        0,    43,    44,    45,    45,    46,    46,    46,    47,    48,
-      49,    49,    49,    49,    49,    49,    49,    50,    50
+      48,    49,    49,    49,    49,    49,    49,    49,    50,    50
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
        0,     2,     1,     2,     1,     1,     1,     1,     5,     4,
-       1,     1,     3,     3,     3,     3,     3,     5,     5
+       4,     1,     1,     3,     3,     3,     3,     3,     5,     5
 };
 
 
@@ -1138,64 +1141,77 @@ yyreduce:
                                                 {
         symbolTable[(yyvsp[-3].sval)].type = "int";
         symbolTable[(yyvsp[-3].sval)].data = std::to_string((yyvsp[-1].ival));
-        code_out << "int " << (yyvsp[-3].sval) << " = " << (yyvsp[-1].ival) << ";\n";
+        code_out << "Value " << (yyvsp[-3].sval) << " = makeInt(" << (yyvsp[-1].ival) << ");\n";
     }
-#line 1144 "parser.tab.cpp"
+#line 1147 "parser.tab.cpp"
     break;
 
   case 9: /* assignment: IDENTIFIER ASSIGN expression SEMICOLON  */
 #line 62 "parser.y"
                                             {
         symbolTable[(yyvsp[-3].sval)].data = std::to_string((yyvsp[-1].ival));
-        code_out << (yyvsp[-3].sval) << " = " << (yyvsp[-1].ival) << ";\n";
+        code_out << (yyvsp[-3].sval) << " = makeInt(" << (yyvsp[-1].ival) << ");\n";
     }
-#line 1153 "parser.tab.cpp"
+#line 1156 "parser.tab.cpp"
     break;
 
-  case 10: /* expression: NUMBER  */
-#line 69 "parser.y"
+  case 10: /* assignment: IDENTIFIER ASSIGN STRING SEMICOLON  */
+#line 66 "parser.y"
+                                        {
+        symbolTable[(yyvsp[-3].sval)].type = "string";
+        symbolTable[(yyvsp[-3].sval)].data = (yyvsp[-1].sval);
+
+        code_out << (yyvsp[-3].sval) << " = makeString(\"" << (yyvsp[-1].sval) << "\");\n";
+    }
+#line 1167 "parser.tab.cpp"
+    break;
+
+  case 11: /* expression: NUMBER  */
+#line 75 "parser.y"
             {
         (yyval.ival) = (yyvsp[0].ival);
     }
-#line 1161 "parser.tab.cpp"
+#line 1175 "parser.tab.cpp"
     break;
 
-  case 11: /* expression: IDENTIFIER  */
-#line 72 "parser.y"
+  case 12: /* expression: IDENTIFIER  */
+#line 78 "parser.y"
                 {
         (yyval.ival) = std::stoi(symbolTable[(yyvsp[0].sval)].data);
     }
-#line 1169 "parser.tab.cpp"
+#line 1183 "parser.tab.cpp"
     break;
 
-  case 16: /* expression: LPAREN expression RPAREN  */
-#line 79 "parser.y"
+  case 17: /* expression: LPAREN expression RPAREN  */
+#line 85 "parser.y"
                               {
         (yyval.ival) = (yyvsp[-1].ival);
     }
-#line 1177 "parser.tab.cpp"
+#line 1191 "parser.tab.cpp"
     break;
 
-  case 17: /* print_statement: PRINT LPAREN STRING RPAREN SEMICOLON  */
-#line 86 "parser.y"
-      {
-         // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
-         code_out << "   printf(\"" << (yyvsp[-2].sval) << "\");\n";
-         code_out << "printf(\"\\n\");\n";
-      }
-#line 1187 "parser.tab.cpp"
-    break;
-
-  case 18: /* print_statement: PRINT LPAREN IDENTIFIER RPAREN SEMICOLON  */
+  case 18: /* print_statement: PRINT LPAREN STRING RPAREN SEMICOLON  */
 #line 92 "parser.y"
+      {
+        // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
+        // code_out << "   printf(\"" << $3 << "\");\n";
+        // code_out << "printf(\"\\n\");\n";
+        code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << "\"))";
+      }
+#line 1202 "parser.tab.cpp"
+    break;
+
+  case 19: /* print_statement: PRINT LPAREN IDENTIFIER RPAREN SEMICOLON  */
+#line 99 "parser.y"
                                               {
-        code_out << "printf(\"%d\\n\","<< (yyvsp[-2].sval) << ");\n";
+       // code_out << "printf(\"%d\\n\","<< $3 << ");\n";
+       code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
     }
-#line 1195 "parser.tab.cpp"
+#line 1211 "parser.tab.cpp"
     break;
 
 
-#line 1199 "parser.tab.cpp"
+#line 1215 "parser.tab.cpp"
 
       default: break;
     }
@@ -1388,7 +1404,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 97 "parser.y"
+#line 105 "parser.y"
 
 
 void yyerror(const char *s)

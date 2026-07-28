@@ -1,0 +1,19 @@
+#pragma once
+
+#include <string>
+
+enum class ValueType{
+    INT,
+    STRING
+};
+
+struct Value{
+    ValueType type;
+    int intValue = 0;
+    std::string stringValue;
+};
+
+Value makeInt(int value);
+Value makeString(const std::string& value);
+
+void printValue(const Value& value);

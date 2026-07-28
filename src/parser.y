@@ -54,14 +54,20 @@ declaration
     : INT IDENTIFIER ASSIGN expression SEMICOLON{
         symbolTable[$2].type = "int";
         symbolTable[$2].data = std::to_string($4);
-        code_out << "int " << $2 << " = " << $4 << ";\n";
+        code_out << "Value " << $2 << " = makeInt(" << $4 << ");\n";
     }
     ;
 
 assignment
     : IDENTIFIER ASSIGN expression SEMICOLON{
         symbolTable[$1].data = std::to_string($3);
-        code_out << $1 << " = " << $3 << ";\n";
+        code_out << $1 << " = makeInt(" << $3 << ");\n";
+    }
+    | IDENTIFIER ASSIGN STRING SEMICOLON{
+        symbolTable[$1].type = "string";
+        symbolTable[$1].data = $3;
+
+        code_out << $1 << " = makeString(\"" << $3 << "\");\n";
     }
     ;
 
@@ -84,13 +90,15 @@ expression
 print_statement
     : PRINT LPAREN STRING RPAREN SEMICOLON
       {
-         // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
-         code_out << "   printf(\"" << $3 << "\");\n";
-         code_out << "printf(\"\\n\");\n";
+        // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
+        // code_out << "   printf(\"" << $3 << "\");\n";
+        // code_out << "printf(\"\\n\");\n";
+        code_out << "printValue(makeString(\"" << $3 << "\"))";
       }
 
     | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
-        code_out << "printf(\"%d\\n\","<< $3 << ");\n";
+       // code_out << "printf(\"%d\\n\","<< $3 << ");\n";
+       code_out << "printValue(" << $3 << ");\n";
     }
     ;
 
