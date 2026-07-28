@@ -1,4 +1,4 @@
-# RadonLang
+# RadonLang Compiler
 
 RadonLang is a simple educational programming language developed using Flex, Bison and C++.
 
