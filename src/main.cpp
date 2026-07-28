@@ -58,21 +58,20 @@ int main(int argc, char *argv[])
         }
         
         else{
-            outputPath = inputPath.stem();
+            outputPath = "src";
+            outputPath /= inputPath.stem();
+        }
+
+        if(outputPath.parent_path().empty()){
+            outputPath = std::filesystem::path("src") / outputPath;
+        } else {
+            std::filesystem::create_directories(outputPath.parent_path());
         }
         
         if (outputPath.extension() != ".exe" ){
-            exeName += ".exe";
+            outputPath += ".exe";
         }
-
-        //std::filesystem::create_directories("../bin");
-
-        if(!outputPath.parent_path().empty()){
-            std::filesystem::create_directories(outputPath.parent_path());
-        }
-
-        std::filesystem::path tempFile = outputPath.parent_path()/"temp_out.cpp";
-       // std::string outputPath = "../bin/" + exeName;
+        std::filesystem::path tempFile = "src/temp_out.cpp";
 
     code_out.open(tempFile);
    
@@ -98,7 +97,8 @@ int main(int argc, char *argv[])
     code_out.close();
     fclose(yyin);
 
-    std::string command = "g++ -I. \"" + tempFile.string() + "\" runtime.cpp -o \"" + outputPath.string() +"\"";
+    std::string command = "g++ -I. \"" + tempFile.string() + "\" src/runtime.cpp -o \"" + outputPath.string() +"\"";
+    // std::cout << command << std::endl;
     int result = system(command.c_str());
     printSuccess("Compilation Successful!");
 

@@ -67,7 +67,7 @@
 
 
 /* First part of user prologue.  */
-#line 1 "parser.y"
+#line 1 "src/parser.y"
 
 #include <iostream>
 #include <fstream>
@@ -83,7 +83,7 @@ extern FILE *yyin;
 void yyerror(const char *s);
 extern std::ofstream code_out;
 
-#line 87 "parser.tab.cpp"
+#line 87 "src/parser.tab.cpp"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -1137,81 +1137,81 @@ yyreduce:
   switch (yyn)
     {
   case 8: /* declaration: INT IDENTIFIER ASSIGN expression SEMICOLON  */
-#line 54 "parser.y"
+#line 54 "src/parser.y"
                                                 {
         symbolTable[(yyvsp[-3].sval)].type = "int";
         symbolTable[(yyvsp[-3].sval)].data = std::to_string((yyvsp[-1].ival));
         code_out << "Value " << (yyvsp[-3].sval) << " = makeInt(" << (yyvsp[-1].ival) << ");\n";
     }
-#line 1147 "parser.tab.cpp"
+#line 1147 "src/parser.tab.cpp"
     break;
 
   case 9: /* assignment: IDENTIFIER ASSIGN expression SEMICOLON  */
-#line 62 "parser.y"
+#line 62 "src/parser.y"
                                             {
         symbolTable[(yyvsp[-3].sval)].data = std::to_string((yyvsp[-1].ival));
         code_out << (yyvsp[-3].sval) << " = makeInt(" << (yyvsp[-1].ival) << ");\n";
     }
-#line 1156 "parser.tab.cpp"
+#line 1156 "src/parser.tab.cpp"
     break;
 
   case 10: /* assignment: IDENTIFIER ASSIGN STRING SEMICOLON  */
-#line 66 "parser.y"
+#line 66 "src/parser.y"
                                         {
         symbolTable[(yyvsp[-3].sval)].type = "string";
         symbolTable[(yyvsp[-3].sval)].data = (yyvsp[-1].sval);
 
         code_out << (yyvsp[-3].sval) << " = makeString(\"" << (yyvsp[-1].sval) << "\");\n";
     }
-#line 1167 "parser.tab.cpp"
+#line 1167 "src/parser.tab.cpp"
     break;
 
   case 11: /* expression: NUMBER  */
-#line 75 "parser.y"
+#line 75 "src/parser.y"
             {
         (yyval.ival) = (yyvsp[0].ival);
     }
-#line 1175 "parser.tab.cpp"
+#line 1175 "src/parser.tab.cpp"
     break;
 
   case 12: /* expression: IDENTIFIER  */
-#line 78 "parser.y"
+#line 78 "src/parser.y"
                 {
         (yyval.ival) = std::stoi(symbolTable[(yyvsp[0].sval)].data);
     }
-#line 1183 "parser.tab.cpp"
+#line 1183 "src/parser.tab.cpp"
     break;
 
   case 17: /* expression: LPAREN expression RPAREN  */
-#line 85 "parser.y"
+#line 85 "src/parser.y"
                               {
         (yyval.ival) = (yyvsp[-1].ival);
     }
-#line 1191 "parser.tab.cpp"
+#line 1191 "src/parser.tab.cpp"
     break;
 
   case 18: /* print_statement: PRINT LPAREN STRING RPAREN SEMICOLON  */
-#line 92 "parser.y"
+#line 92 "src/parser.y"
       {
         // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
         // code_out << "   printf(\"" << $3 << "\");\n";
         // code_out << "printf(\"\\n\");\n";
         code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << "\"))";
       }
-#line 1202 "parser.tab.cpp"
+#line 1202 "src/parser.tab.cpp"
     break;
 
   case 19: /* print_statement: PRINT LPAREN IDENTIFIER RPAREN SEMICOLON  */
-#line 99 "parser.y"
+#line 99 "src/parser.y"
                                               {
        // code_out << "printf(\"%d\\n\","<< $3 << ");\n";
        code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
     }
-#line 1211 "parser.tab.cpp"
+#line 1211 "src/parser.tab.cpp"
     break;
 
 
-#line 1215 "parser.tab.cpp"
+#line 1215 "src/parser.tab.cpp"
 
       default: break;
     }
@@ -1404,7 +1404,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 105 "parser.y"
+#line 105 "src/parser.y"
 
 
 void yyerror(const char *s)
