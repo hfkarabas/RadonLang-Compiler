@@ -12,6 +12,7 @@ extern int yylex();
 extern FILE *yyin;
 void yyerror(const char *s);
 extern std::ofstream code_out;
+SymbolTable symbolTable;
 %}
 
 %token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
@@ -45,29 +46,47 @@ statements
     ;
 
 statement
-    : declaration
-    | assignment
+    : assignment
     | print_statement
-    ;
-
-declaration
-    : INT IDENTIFIER ASSIGN expression SEMICOLON{
-        symbolTable[$2].type = "int";
-        symbolTable[$2].data = std::to_string($4);
-        code_out << "Value " << $2 << " = makeInt(" << $4 << ");\n";
-    }
     ;
 
 assignment
     : IDENTIFIER ASSIGN expression SEMICOLON{
-        symbolTable[$1].data = std::to_string($3);
-        code_out << $1 << " = makeInt(" << $3 << ");\n";
+        //symbolTable[$1].data = std::to_string($3);
+        //code_out << $1 << " = makeInt(" << $3 << ");\n";
+        if(!symbolTable.exists($1)){
+            Symbol s;
+            s.type = "int";
+            s.data = std::to_string($3);
+
+            symbolTable.add($1,s);
+
+            code_out << "Value " << $1 << " = makeInt(" << $3 << ");\n";
+        } else{
+            Symbol* s = symbolTable.get($1);
+            s->data = std::to_string($3);
+            code_out << $1 << " = makeInt(" << $3 << ");\n";
+        }
     }
     | IDENTIFIER ASSIGN STRING SEMICOLON{
-        symbolTable[$1].type = "string";
-        symbolTable[$1].data = $3;
+        //symbolTable[$1].type = "string";
+        //symbolTable[$1].data = $3;
+        //code_out << $1 << " = makeString(\"" << $3 << "\");\n";
 
-        code_out << $1 << " = makeString(\"" << $3 << "\");\n";
+        if(!symbolTable.exists($1)){
+            Symbol s;
+            s.type = "string";
+            s.data = $3;
+
+            symbolTable.add($1,s);
+
+            code_out << "Value " << $1 << " = makeString(" << $3 << "\");\n";
+        } else{
+            Symbol* s = symbolTable.get($1);
+            s->type = "string";
+            s->data = $3;
+            code_out << $1 << " = makeString(" << $3 << "\");\n";
+        }
     }
     ;
 
@@ -76,7 +95,14 @@ expression
         $$ = $1;
     }
     | IDENTIFIER{
-        $$ = std::stoi(symbolTable[$1].data);
+        //$$ = std::stoi(symbolTable[$1].data);
+        Symbol* s = symbolTable.get($1);
+
+        if(s == nullptr){
+            yyerror("Undefined Variable");
+            YYERROR;
+        }
+        $$ = std::stoi(s->data);
     }
     | expression PLUS expression
     | expression MINUS expression
