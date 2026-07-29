@@ -7,12 +7,17 @@
 #include <cstdio>
 
 #include "symbolTable.h"
+#include "utils/utils.h"
+#include "expression.h"
 
 extern int yylex();
 extern FILE *yyin;
-void yyerror(const char *s);
+extern int lineNumber;
+void yyerror(const char *s){
+    printSyntaxError(s,lineNumber);
+}
 extern std::ofstream code_out;
-SymbolTable symbolTable;
+extern SymbolTable symbolTable;
 %}
 
 %token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
@@ -21,8 +26,14 @@ SymbolTable symbolTable;
 %token AND OR NOT COMMA INC DEC
 %token PRINT
 
+%code requires
+{
+  #include <expression.h>
+}
+
 %union {
     int ival;
+    Expression* expr;
     char *sval;
 }
 
@@ -30,7 +41,7 @@ SymbolTable symbolTable;
 %token <sval> IDENTIFIER
 %token <sval> STRING
 
-%type <ival> expression
+%type <expr> expression
 
 %left PLUS MINUS
 %left TIMES DIVIDE
@@ -48,30 +59,40 @@ statements
 statement
     : assignment
     | print_statement
+    | block
+    ;
+
+block
+    : LBRACE
+    {
+        symbolTable.enterScope();
+    }
+    statements
+    RBRACE
+    {
+        symbolTable.exitScope();
+    }
     ;
 
 assignment
-    : IDENTIFIER ASSIGN expression SEMICOLON{
-        //symbolTable[$1].data = std::to_string($3);
-        //code_out << $1 << " = makeInt(" << $3 << ");\n";
+    : IDENTIFIER ASSIGN expression SEMICOLON
+    {
         if(!symbolTable.exists($1)){
             Symbol s;
             s.type = "int";
-            s.data = std::to_string($3);
+            s.data = $3->code;
 
             symbolTable.add($1,s);
 
-            code_out << "Value " << $1 << " = makeInt(" << $3 << ");\n";
+            code_out << "Value " << $1 << " = " << $3->code << ";\n";
         } else{
             Symbol* s = symbolTable.get($1);
-            s->data = std::to_string($3);
-            code_out << $1 << " = makeInt(" << $3 << ");\n";
+
+            s->data = $3->code;
+            code_out << $1 << " = " << $3->code << ";\n";
         }
     }
     | IDENTIFIER ASSIGN STRING SEMICOLON{
-        //symbolTable[$1].type = "string";
-        //symbolTable[$1].data = $3;
-        //code_out << $1 << " = makeString(\"" << $3 << "\");\n";
 
         if(!symbolTable.exists($1)){
             Symbol s;
@@ -92,20 +113,27 @@ assignment
 
 expression
     : NUMBER{
-        $$ = $1;
+        $$ = new Expression();
+        $$->code = "makeInt(" + std::to_string($1) + ")";
     }
     | IDENTIFIER{
-        //$$ = std::stoi(symbolTable[$1].data);
         Symbol* s = symbolTable.get($1);
 
         if(s == nullptr){
-            yyerror("Undefined Variable");
+            printSemanticError("Undefined Variable" + std::string($1) + "'", lineNumber);
             YYERROR;
         }
-        $$ = std::stoi(s->data);
+        $$ = new Expression();
+        $$->code = $1;
     }
-    | expression PLUS expression
-    | expression MINUS expression
+    | expression PLUS expression{
+        $$ = new Expression();
+        $$->code = "(" + $1->code + " + " + $3->code + ")";
+    }
+    | expression MINUS expression{
+        $$ = new Expression();
+        $$->code = "(" + $1->code + " - " + $3->code + ")";
+    }
     | expression TIMES expression
     | expression DIVIDE expression
     | LPAREN expression RPAREN{
@@ -116,21 +144,19 @@ expression
 print_statement
     : PRINT LPAREN STRING RPAREN SEMICOLON
       {
-        // fprintf(code_out, "   printf(\"%s\");\n printf(\"\\n\");\n", $3);
-        // code_out << "   printf(\"" << $3 << "\");\n";
-        // code_out << "printf(\"\\n\");\n";
-        code_out << "printValue(makeString(\"" << $3 << "\"))";
+        Symbol* s = symbolTable.get($3);
+
+        if(s==nullptr){
+            printSemanticError("Undefined Variable" + std::string($3) + "'",lineNumber);
+            YYERROR;
+        }
+
+        code_out << "printValue(\"" << $3 << "\"))";
       }
 
     | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
-       // code_out << "printf(\"%d\\n\","<< $3 << ");\n";
        code_out << "printValue(" << $3 << ");\n";
     }
     ;
 
 %%
-
-void yyerror(const char *s)
-{
-    printf("Syntax Error!\n");
-}

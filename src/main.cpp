@@ -8,6 +8,9 @@
 
 #include "utils/utils.h"
 #include "cli/radoncli.h"
+#include "symbolTable.h"
+
+SymbolTable symbolTable;
 
 extern FILE *yyin;
 std::ofstream code_out;
@@ -88,19 +91,34 @@ int main(int argc, char *argv[])
     <<"#include \"runtime.h\"\n\n"
     <<"int main()\n"
     <<"{\n";
-    yyparse();
+    
+    int parseResult = yyparse();
+
+    if(parseResult != 0){
+            code_out.close();
+            fclose(yyin);
+            printError("Compilation Failed");
+            return 1;
+        }
 
     code_out
             << "\nreturn 0;\n"
             << "}\n";
 
-    code_out.close();
-    fclose(yyin);
+        code_out.close();
+        fclose(yyin);
 
     std::string command = "g++ -I. \"" + tempFile.string() + "\" src/runtime.cpp -o \"" + outputPath.string() +"\"";
     // std::cout << command << std::endl;
     int result = system(command.c_str());
-    printSuccess("Compilation Successful!");
+
+
+    //compileGeneratedCpp();
+
+    if(result == 0)
+        printSuccess("Compilation Successful!");
+    else
+        printError("C++ Compilation Failed");
 
     //std::filesystem::remove(tempFile);
     return result;

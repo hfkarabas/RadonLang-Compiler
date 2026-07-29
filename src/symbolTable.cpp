@@ -1,18 +1,39 @@
 #include "symbolTable.h"
+#include <iostream>
 
 bool SymbolTable::exists(const std::string& name){
-    return symbols.find(name) != symbols.end();
+    for (auto it = scopes.rbegin(); it != scopes.rend(); ++ it){
+        if(it->symbols.find(name) != it->symbols.end())
+        return true;
+    }
+    return false;
 }
 
 void SymbolTable::add(const std::string& name, const Symbol& symbol){
-    symbols[name] = symbol;
+    scopes.back().symbols[name] = symbol;
 }
 
 Symbol* SymbolTable::get(const std::string& name){
-    auto it = symbols.find(name);
 
-    if (it == symbols.end())
-        return nullptr;
+    for (auto it = scopes.rbegin(); it != scopes.rend(); ++ it){
+        auto symbol = it->symbols.find(name);
 
-    return &(it -> second);
+        if (symbol != it->symbols.end())
+            return &symbol->second;
+    }
+    return nullptr;
+}
+
+SymbolTable::SymbolTable(){
+    scopes.push_back(Scope{});
+}
+
+void SymbolTable::enterScope(){
+    scopes.push_back(Scope{});
+}
+
+void SymbolTable::exitScope(){
+    if(scopes.size() > 1){
+        scopes.pop_back();
+    }
 }

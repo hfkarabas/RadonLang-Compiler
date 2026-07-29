@@ -4,6 +4,8 @@
 #include <cstring>
 #include <cerrno>
 
+extern int yylineno;
+
 #define RESET "\e[0m"
 #define RED "\e[31m"
 #define GREEN "\e[32m"
@@ -16,6 +18,14 @@ inline void printError(const std::string& msg){
 
 inline void printSystemError(const std::string& msg){
     std::cerr << RED << "[ERROR] " << msg << ":" << strerror(errno) << RESET << std::endl;
+}
+
+inline void printSyntaxError(const std::string& msg, int line){
+    std::cerr << RED << "[SYNTAX ERROR] Line " << line << ":" << RESET << std::endl;
+}
+
+inline void printSemanticError(const std::string& msg, int line){
+    std::cerr << RED << "[SEMANTIC ERROR] Line " << line << ":" << RESET << std::endl;
 }
 
 inline void printSuccess(const std::string& msg){
