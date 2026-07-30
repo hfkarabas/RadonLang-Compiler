@@ -14,7 +14,7 @@ The purpose of this project is to demonstrate the complete compilation pipeline 
 - Makefile Build System
 
 ## Example
-x = 5;
-message = "Hello";
-print(x)
-print(hello)
+x = 5
+message = "Hello"
+SAY: x
+say: message
