@@ -57,16 +57,9 @@ statements
     ;
 
 statement
-    : assignment{
-        std::cout << "assignment" << std::endl;
-    }
-
-    | print_statement{
-        std::cout << "print statement" << std:: endl;
-    }
-    | block {
-        std::cout << "block" << std::endl;
-    }
+    : assignment
+    | print_statement
+    | block
     ;
 
 block
@@ -127,7 +120,7 @@ expression
         Symbol* s = symbolTable.get($1);
 
         if(s == nullptr){
-            printSemanticError("Undefined Variable" + std::string($1) + "'", lineNumber);
+            printSemanticError("Undefined Variable " + std::string($1) + "'", lineNumber);
             YYERROR;
         }
         $$ = new Expression();
@@ -151,20 +144,24 @@ expression
 print_statement
     : PRINT LPAREN STRING RPAREN SEMICOLON
       {
-        std::cout << "print rule" << std::endl;
         Symbol* s = symbolTable.get($3);
-        code_out << "printValue(makeString(\"" << $3 << ");\n";
 
         if(s==nullptr){
-            printSemanticError("Undefined Variable" + std::string($3) + "'",lineNumber);
+            printSemanticError("Undefined Variable " + std::string($3) + "'",lineNumber);
             YYERROR;
         }
 
-        code_out << "printValue(" << $3 << ");\n";
+        code_out << "printValue(makeString(\"" << $3 << "\");\n";
       }
 
     | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
-       code_out << "printValue(" << $3 << ");\n";
+        Symbol* s = symbolTable.get($3);
+
+        if(s==nullptr){
+            printSemanticError("Undefined Variable " + std::string($3) + "'",lineNumber);
+            YYERROR;
+        }
+        code_out << "printValue(makeString(\"" << $3 << ");\n";
     }
     ;
 

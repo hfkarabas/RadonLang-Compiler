@@ -18,15 +18,10 @@ int lineNumber = 1;
 "-" { return MINUS; }
 "*" { return TIMES; }
 "/" { return DIVIDE; }
-";" {
-std::cout << "token semicolon " << std::endl;
-return SEMICOLON; }
+";" {return SEMICOLON; }
 "(" {
-std::cout << "token lparen " << std::endl;
 return LPAREN; }
-")" { 
-std::cout << "token rparen " << std::endl;
-return RPAREN; }
+")" { return RPAREN; }
 "case" {return CASE;}	
 "default" {return DEFAULT;}
 "if" {return IF;}
@@ -50,26 +45,18 @@ return RPAREN; }
 "||" {return OR;}
 "!" {return NOT;}
 "," {return COMMA;}
-"{" {
-std::cout << "token lbrace" << std::endl;
-return LBRACE;}
-"}" {
-std::cout << "token rbrace" << std::endl;
-return RBRACE;}
+"{" {return LBRACE;}
+"}" {return RBRACE;}
 "++" {return INC;}
 "--" {return DEC;}
-"print" {
-std::cout << "token print" << std::endl;
-return PRINT;}
+"print" {return PRINT;}
 \"([^\\\"]|\\.)*\" {
-    std::cout << "token identifier" << yytext << std::endl;
     yytext[yyleng - 1] = '\0';
     yylval.sval = strdup(yytext + 1);   
     return STRING;
 }
 [0-9]+ {yylval.ival = atoi(yytext); return NUMBER;}
 [a-zA-Z_][a-zA-Z0-9_]* {
-std::cout << "token identifier" << yytext << std::endl;
 yylval.sval = strdup(yytext); return IDENTIFIER;}
 [\n] {lineNumber++;}
 [ \t\r]+ ;

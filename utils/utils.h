@@ -21,11 +21,11 @@ inline void printSystemError(const std::string& msg){
 }
 
 inline void printSyntaxError(const std::string& msg, int line){
-    std::cerr << RED << "[SYNTAX ERROR] Line " << line << ":" << RESET << std::endl;
+    std::cerr << RED << "[SYNTAX ERROR] Line " << line << ": " << msg << RESET << std::endl;
 }
 
 inline void printSemanticError(const std::string& msg, int line){
-    std::cerr << RED << "[SEMANTIC ERROR] Line " << line << ":" << RESET << std::endl;
+    std::cerr << RED << "[SEMANTIC ERROR] Line " << line << ": " << msg << RESET << std::endl;
 }
 
 inline void printSuccess(const std::string& msg){

@@ -6,7 +6,3 @@ int main()
 {
 Value x = makeInt(5);
 Value y = x;
-printValue(y);
-
-return 0;
-}
