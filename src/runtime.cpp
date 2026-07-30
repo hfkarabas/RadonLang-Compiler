@@ -27,3 +27,19 @@ void printValue(const Value& value){
             break;
     }
 }
+
+Value operator+(const Value& a, const Value& b){
+    return makeInt(a.intValue + b.intValue);
+}
+
+Value operator-(const Value& a, const Value& b){
+    return makeInt(a.intValue - b.intValue);
+}
+
+Value operator*(const Value& a, const Value& b){
+    return makeInt(a.intValue * b.intValue);
+}
+
+Value operator/(const Value& a, const Value& b){
+    return makeInt(a.intValue / b.intValue);
+}

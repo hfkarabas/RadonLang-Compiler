@@ -2,12 +2,13 @@
 
 %{
 #include <stdio.h>
-#include <stdlib.h>   // atoi
-#include <string.h>   // strdup
+#include <stdlib.h>
+#include <string.h>
 #include <iostream>
 #include "parser.tab.hpp"
 
 int lineNumber = 1;
+bool sentLastNewline = false;
 %}
 
 %%
@@ -18,7 +19,6 @@ int lineNumber = 1;
 "-" { return MINUS; }
 "*" { return TIMES; }
 "/" { return DIVIDE; }
-";" {return SEMICOLON; }
 "(" {
 return LPAREN; }
 ")" { return RPAREN; }
@@ -49,7 +49,8 @@ return LPAREN; }
 "}" {return RBRACE;}
 "++" {return INC;}
 "--" {return DEC;}
-"print" {return PRINT;}
+"SAY" {return SAY;}
+":" {return COLON;}
 \"([^\\\"]|\\.)*\" {
     yytext[yyleng - 1] = '\0';
     yylval.sval = strdup(yytext + 1);   
@@ -57,8 +58,16 @@ return LPAREN; }
 }
 [0-9]+ {yylval.ival = atoi(yytext); return NUMBER;}
 [a-zA-Z_][a-zA-Z0-9_]* {yylval.sval = strdup(yytext); return IDENTIFIER;}
-[\n] {lineNumber++;}
+[\n] {lineNumber++; return NEWLINE;}
 [ \t\r]+ ;
 . { printf("Unknown character: %s\n", yytext); }
+
+<<EOF>> {
+    if (!sentLastNewline){
+        sentLastNewline = true;
+        return NEWLINE;
+    }
+    return 0;
+}
 
 %%

@@ -20,11 +20,11 @@ extern std::ofstream code_out;
 extern SymbolTable symbolTable;
 %}
 
-%token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
+%token INT ASSIGN NEWLINE PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
 %token CASE DEFAULT IF SWITCH ELSE FOR DO WHILE GOTO CONTINUE BREAK RETURN SIZEOF
 %token EQUAL NEQUAL GEQUAL LEQUAL GREATER LESSTHAN
 %token AND OR NOT COMMA INC DEC
-%token PRINT
+%token SAY COLON
 
 %code requires
 {
@@ -57,8 +57,8 @@ statements
     ;
 
 statement
-    : assignment
-    | print_statement
+    : assignment NEWLINE
+    | print_statement NEWLINE
     | block
     ;
 
@@ -75,7 +75,7 @@ block
     ;
 
 assignment
-    : IDENTIFIER ASSIGN expression SEMICOLON
+    : IDENTIFIER ASSIGN expression
     {
         if(!symbolTable.exists($1)){
             Symbol s;
@@ -92,7 +92,7 @@ assignment
             code_out << $1 << " = " << $3->code << ";\n";
         }
     }
-    | IDENTIFIER ASSIGN STRING SEMICOLON{
+    | IDENTIFIER ASSIGN STRING{
 
         if(!symbolTable.exists($1)){
             Symbol s;
@@ -142,19 +142,14 @@ expression
     ;
 
 print_statement
-    : PRINT LPAREN STRING RPAREN SEMICOLON
-      {
+    : SAY COLON STRING
+        {
         code_out << "printValue(makeString(\"" << $3 << "\"));\n";
-      }
+    }
 
-    | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
-        Symbol* s = symbolTable.get($3);
-
-        if(s==nullptr){
-            printSemanticError("Undefined Variable " + std::string($3) + "",lineNumber);
-            YYERROR;
-        }
-        code_out << "printValue(" << $3 << ");\n";
+    | SAY COLON expression
+        {
+        code_out << "printValue(" << $3->code << ");\n";
     }
     ;
 

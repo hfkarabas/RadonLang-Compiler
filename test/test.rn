@@ -1,5 +1,1 @@
-print("merhaba");
-x = "hello";
-print(x);
-x = 5;
-print(x);
+SAY: 2+2

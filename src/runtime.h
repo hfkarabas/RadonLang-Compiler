@@ -17,3 +17,8 @@ Value makeInt(int value);
 Value makeString(const std::string& value);
 
 void printValue(const Value& value);
+
+Value operator+(const Value& a, const Value& b);
+Value operator-(const Value& a, const Value& b);
+Value operator*(const Value& a, const Value& b);
+Value operator/(const Value& a, const Value& b);

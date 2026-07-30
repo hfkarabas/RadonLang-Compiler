@@ -4,11 +4,7 @@
 
 int main()
 {
-printValue(makeString("merhaba"));
-Value x = makeString("hello");
-printValue(x);
-x = makeInt(5);
-printValue(x);
+printValue((makeInt(2) + makeInt(2)));
 
 return 0;
 }
