@@ -5,6 +5,4 @@
 int main()
 {
 printValue((makeInt(2) + makeInt(2)));
-
-return 0;
-}
+Value x = makeInt(5);

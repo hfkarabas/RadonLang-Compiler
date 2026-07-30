@@ -60,6 +60,7 @@ statement
     : assignment NEWLINE
     | print_statement NEWLINE
     | block
+    | NEWLINE
     ;
 
 block
