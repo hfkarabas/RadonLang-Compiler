@@ -1191,7 +1191,7 @@ yyreduce:
 
             symbolTable.add((yyvsp[-3].sval),s);
 
-            code_out << "Value " << (yyvsp[-3].sval) << " = makeString(" << (yyvsp[-1].sval) << "\");\n";
+            code_out << "Value " << (yyvsp[-3].sval) << " = makeString(\"" << (yyvsp[-1].sval) << "\");\n";
         } else{
             Symbol* s = symbolTable.get((yyvsp[-3].sval));
             s->type = "string";
@@ -1262,7 +1262,7 @@ yyreduce:
             YYERROR;
         }
 
-        code_out << "printValue(\"" << (yyvsp[-2].sval) << "\"))";
+        code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
       }
 #line 1268 "src/parser.tab.cpp"
     break;

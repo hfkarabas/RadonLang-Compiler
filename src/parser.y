@@ -101,7 +101,7 @@ assignment
 
             symbolTable.add($1,s);
 
-            code_out << "Value " << $1 << " = makeString(" << $3 << "\");\n";
+            code_out << "Value " << $1 << " = makeString(\"" << $3 << "\");\n";
         } else{
             Symbol* s = symbolTable.get($1);
             s->type = "string";
@@ -151,7 +151,7 @@ print_statement
             YYERROR;
         }
 
-        code_out << "printValue(\"" << $3 << "\"))";
+        code_out << "printValue(" << $3 << ");\n";
       }
 
     | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
