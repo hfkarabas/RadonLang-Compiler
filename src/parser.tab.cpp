@@ -560,7 +560,7 @@ static const yytype_uint8 yyrline[] =
 {
        0,    51,    51,    55,    56,    60,    61,    62,    67,    66,
       78,    95,   115,   119,   129,   133,   137,   138,   139,   145,
-     157
+     158
 };
 #endif
 
@@ -1256,6 +1256,7 @@ yyreduce:
 #line 146 "src/parser.y"
       {
         Symbol* s = symbolTable.get((yyvsp[-2].sval));
+        code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << ");\n";
 
         if(s==nullptr){
             printSemanticError("Undefined Variable" + std::string((yyvsp[-2].sval)) + "'",lineNumber);
@@ -1264,19 +1265,19 @@ yyreduce:
 
         code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
       }
-#line 1268 "src/parser.tab.cpp"
+#line 1269 "src/parser.tab.cpp"
     break;
 
   case 20: /* print_statement: PRINT LPAREN IDENTIFIER RPAREN SEMICOLON  */
-#line 157 "src/parser.y"
+#line 158 "src/parser.y"
                                               {
        code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
     }
-#line 1276 "src/parser.tab.cpp"
+#line 1277 "src/parser.tab.cpp"
     break;
 
 
-#line 1280 "src/parser.tab.cpp"
+#line 1281 "src/parser.tab.cpp"
 
       default: break;
     }
@@ -1469,4 +1470,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 162 "src/parser.y"
+#line 163 "src/parser.y"

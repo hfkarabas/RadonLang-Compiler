@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+
 #include <filesystem>
 #include <cstdlib>
 #include <cstdio>
@@ -11,20 +12,21 @@
 #include "expression.h"
 
 extern int yylex();
-extern FILE *yyin;
 extern int lineNumber;
 void yyerror(const char *s){
     printSyntaxError(s,lineNumber);
 }
 extern std::ofstream code_out;
 extern SymbolTable symbolTable;
-%}
 
-%token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
-%token CASE DEFAULT IF SWITCH ELSE FOR DO WHILE GOTO CONTINUE BREAK RETURN SIZEOF
-%token EQUAL NEQUAL GEQUAL LEQUAL GREATER LESSTHAN
-%token AND OR NOT COMMA INC DEC
-%token PRINT
+Expression* makeExpression(const std::string& code){%code requires
+{
+    Expression* expr = new Expression();
+    expr->code = code;
+    return expr;
+}
+}
+%}
 
 %code requires
 {
@@ -36,6 +38,12 @@ extern SymbolTable symbolTable;
     Expression* expr;
     char *sval;
 }
+
+%token INT ASSIGN SEMICOLON PLUS MINUS TIMES DIVIDE LPAREN RPAREN LBRACE RBRACE
+%token CASE DEFAULT IF SWITCH ELSE FOR DO WHILE GOTO CONTINUE BREAK RETURN SIZEOF
+%token EQUAL NEQUAL GEQUAL LEQUAL GREATER LESSTHAN
+%token AND OR NOT COMMA INC DEC
+%token PRINT
 
 %token <ival> NUMBER
 %token <sval> IDENTIFIER
@@ -52,8 +60,8 @@ program
     ;
 
 statements
-    : statements statement
-    | statement
+    : 
+    |statements statement
     ;
 
 statement
@@ -78,85 +86,79 @@ assignment
     : IDENTIFIER ASSIGN expression SEMICOLON
     {
         if(!symbolTable.exists($1)){
-            Symbol s;
-            s.type = "int";
-            s.data = $3->code;
+            Symbol symbol;
+            symbol.type = "int";
 
-            symbolTable.add($1,s);
+            symbolTable.add($1,symbol);
 
             code_out << "Value " << $1 << " = " << $3->code << ";\n";
         } else{
-            Symbol* s = symbolTable.get($1);
-
-            s->data = $3->code;
             code_out << $1 << " = " << $3->code << ";\n";
         }
-    }
-    | IDENTIFIER ASSIGN STRING SEMICOLON{
-
-        if(!symbolTable.exists($1)){
-            Symbol s;
-            s.type = "string";
-            s.data = $3;
-
-            symbolTable.add($1,s);
-
-            code_out << "Value " << $1 << " = makeString(\"" << $3 << "\");\n";
-        } else{
-            Symbol* s = symbolTable.get($1);
-            s->type = "string";
-            s->data = $3;
-            code_out << $1 << " = makeString(" << $3 << "\");\n";
-        }
+        delete $3;
     }
     ;
 
 expression
-    : NUMBER{
-        $$ = new Expression();
-        $$->code = "makeInt(" + std::to_string($1) + ")";
+    : NUMBER
+    {
+        $$ = makeExpression("makeInt(" + std::to_string($1) + ")");
     }
-    | IDENTIFIER{
+    | IDENTIFIER
+    {
         Symbol* s = symbolTable.get($1);
 
         if(s == nullptr){
             printSemanticError("Undefined Variable" + std::string($1) + "'", lineNumber);
             YYERROR;
         }
-        $$ = new Expression();
-        $$->code = $1;
+        $$ = makeExpression($1);
+    }
+    | LPAREN expression RPAREN{
+        $$ = makeExpression("(" + $2->code + ")");
+        delete $2;
     }
     | expression PLUS expression{
-        $$ = new Expression();
-        $$->code = "(" + $1->code + " + " + $3->code + ")";
+        $$ = makeExpression("(" + $1->code + " + " + $3->code + ")");
+        delete $1;
+        delete $3;
     }
     | expression MINUS expression{
-        $$ = new Expression();
-        $$->code = "(" + $1->code + " - " + $3->code + ")";
+        $$ = makeExpression("(" + $1->code + " - " + $3->code + ")");
+        delete $1;
+        delete $3;
     }
-    | expression TIMES expression
-    | expression DIVIDE expression
-    | LPAREN expression RPAREN{
-        $$ = $2;
+    | expression TIMES expression{
+        $$ = makeExpression("(" + $1->code + " * " + $3->code + ")");
+        delete $1;
+        delete $3;
+
+    }
+    | expression DIVIDE expression{
+        $$ = makeExpression("(" + $1->code + " / " + $3->code + ")");
+        delete $1;
+        delete $3;
     }
     ;
 
 print_statement
-    : PRINT LPAREN STRING RPAREN SEMICOLON
-      {
+    : PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
         Symbol* s = symbolTable.get($3);
 
-        if(s==nullptr){
-            printSemanticError("Undefined Variable" + std::string($3) + "'",lineNumber);
+        if(s == nullptr){
+            printSemanticError(
+                "Undefined variable " + std::string($3) + "'", lineNumber
+            );
             YYERROR;
         }
-
-        code_out << "printValue(" << $3 << ");\n";
-      }
-
-    | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
        code_out << "printValue(" << $3 << ");\n";
     }
-    ;
+    
+    | PRINT LPAREN STRING RPAREN SEMICOLON
+      {
+        code_out << "printValue(makeString(\"" << $3 << "\"));\n";
+      }
 
+
+    ;
 %%
