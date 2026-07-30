@@ -56,8 +56,7 @@ return LPAREN; }
     return STRING;
 }
 [0-9]+ {yylval.ival = atoi(yytext); return NUMBER;}
-[a-zA-Z_][a-zA-Z0-9_]* {
-yylval.sval = strdup(yytext); return IDENTIFIER;}
+[a-zA-Z_][a-zA-Z0-9_]* {yylval.sval = strdup(yytext); return IDENTIFIER;}
 [\n] {lineNumber++;}
 [ \t\r]+ ;
 . { printf("Unknown character: %s\n", yytext); }

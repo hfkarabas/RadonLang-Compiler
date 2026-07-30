@@ -4,5 +4,11 @@
 
 int main()
 {
-Value x = makeInt(5);
-Value y = x;
+printValue(makeString("merhaba"));
+Value x = makeString("hello");
+printValue(x);
+x = makeInt(5);
+printValue(x);
+
+return 0;
+}

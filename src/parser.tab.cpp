@@ -560,7 +560,7 @@ static const yytype_uint8 yyrline[] =
 {
        0,    51,    51,    55,    56,    60,    61,    62,    67,    66,
       78,    95,   115,   119,   129,   133,   137,   138,   139,   145,
-     157
+     150
 };
 #endif
 
@@ -1196,7 +1196,7 @@ yyreduce:
             Symbol* s = symbolTable.get((yyvsp[-3].sval));
             s->type = "string";
             s->data = (yyvsp[-1].sval);
-            code_out << (yyvsp[-3].sval) << " = makeString(" << (yyvsp[-1].sval) << "\");\n";
+            code_out << (yyvsp[-3].sval) << " = makeString(\"" << (yyvsp[-1].sval) << "\");\n";
         }
     }
 #line 1203 "src/parser.tab.cpp"
@@ -1255,34 +1255,27 @@ yyreduce:
   case 19: /* print_statement: PRINT LPAREN STRING RPAREN SEMICOLON  */
 #line 146 "src/parser.y"
       {
-        Symbol* s = symbolTable.get((yyvsp[-2].sval));
-
-        if(s==nullptr){
-            printSemanticError("Undefined Variable " + std::string((yyvsp[-2].sval)) + "'",lineNumber);
-            YYERROR;
-        }
-
-        code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << "\");\n";
+        code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << "\"));\n";
       }
-#line 1268 "src/parser.tab.cpp"
+#line 1261 "src/parser.tab.cpp"
     break;
 
   case 20: /* print_statement: PRINT LPAREN IDENTIFIER RPAREN SEMICOLON  */
-#line 157 "src/parser.y"
+#line 150 "src/parser.y"
                                               {
         Symbol* s = symbolTable.get((yyvsp[-2].sval));
 
         if(s==nullptr){
-            printSemanticError("Undefined Variable " + std::string((yyvsp[-2].sval)) + "'",lineNumber);
+            printSemanticError("Undefined Variable " + std::string((yyvsp[-2].sval)) + "",lineNumber);
             YYERROR;
         }
-        code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << ");\n";
+        code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
     }
-#line 1282 "src/parser.tab.cpp"
+#line 1275 "src/parser.tab.cpp"
     break;
 
 
-#line 1286 "src/parser.tab.cpp"
+#line 1279 "src/parser.tab.cpp"
 
       default: break;
     }
@@ -1475,4 +1468,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 168 "src/parser.y"
+#line 161 "src/parser.y"

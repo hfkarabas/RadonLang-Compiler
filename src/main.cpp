@@ -94,6 +94,8 @@ int main(int argc, char *argv[])
     
     int parseResult = yyparse();
 
+    std::cout << "parse result = " << parseResult << std::endl;
+
     if(parseResult != 0){
             code_out.close();
             fclose(yyin);

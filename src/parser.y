@@ -106,7 +106,7 @@ assignment
             Symbol* s = symbolTable.get($1);
             s->type = "string";
             s->data = $3;
-            code_out << $1 << " = makeString(" << $3 << "\");\n";
+            code_out << $1 << " = makeString(\"" << $3 << "\");\n";
         }
     }
     ;
@@ -144,24 +144,17 @@ expression
 print_statement
     : PRINT LPAREN STRING RPAREN SEMICOLON
       {
-        Symbol* s = symbolTable.get($3);
-
-        if(s==nullptr){
-            printSemanticError("Undefined Variable " + std::string($3) + "'",lineNumber);
-            YYERROR;
-        }
-
-        code_out << "printValue(makeString(\"" << $3 << "\");\n";
+        code_out << "printValue(makeString(\"" << $3 << "\"));\n";
       }
 
     | PRINT LPAREN IDENTIFIER RPAREN SEMICOLON{
         Symbol* s = symbolTable.get($3);
 
         if(s==nullptr){
-            printSemanticError("Undefined Variable " + std::string($3) + "'",lineNumber);
+            printSemanticError("Undefined Variable " + std::string($3) + "",lineNumber);
             YYERROR;
         }
-        code_out << "printValue(makeString(\"" << $3 << ");\n";
+        code_out << "printValue(" << $3 << ");\n";
     }
     ;
 
