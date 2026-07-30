@@ -558,9 +558,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    51,    51,    55,    56,    60,    61,    62,    67,    66,
-      78,    95,   115,   119,   129,   133,   137,   138,   139,   145,
-     158
+       0,    51,    51,    55,    56,    60,    64,    67,    74,    73,
+      85,   102,   122,   126,   136,   140,   144,   145,   146,   152,
+     166
 };
 #endif
 
@@ -1143,24 +1143,48 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-  case 8: /* $@1: %empty  */
-#line 67 "src/parser.y"
-    {
-        symbolTable.enterScope();
+  case 5: /* statement: assignment  */
+#line 60 "src/parser.y"
+                {
+        std::cout << "assignment" << std::endl;
     }
 #line 1152 "src/parser.tab.cpp"
     break;
 
-  case 9: /* block: LBRACE $@1 statements RBRACE  */
-#line 72 "src/parser.y"
-    {
-        symbolTable.exitScope();
+  case 6: /* statement: print_statement  */
+#line 64 "src/parser.y"
+                     {
+        std::cout << "print statement" << std:: endl;
     }
 #line 1160 "src/parser.tab.cpp"
     break;
 
-  case 10: /* assignment: IDENTIFIER ASSIGN expression SEMICOLON  */
+  case 7: /* statement: block  */
+#line 67 "src/parser.y"
+            {
+        std::cout << "block" << std::endl;
+    }
+#line 1168 "src/parser.tab.cpp"
+    break;
+
+  case 8: /* $@1: %empty  */
+#line 74 "src/parser.y"
+    {
+        symbolTable.enterScope();
+    }
+#line 1176 "src/parser.tab.cpp"
+    break;
+
+  case 9: /* block: LBRACE $@1 statements RBRACE  */
 #line 79 "src/parser.y"
+    {
+        symbolTable.exitScope();
+    }
+#line 1184 "src/parser.tab.cpp"
+    break;
+
+  case 10: /* assignment: IDENTIFIER ASSIGN expression SEMICOLON  */
+#line 86 "src/parser.y"
     {
         if(!symbolTable.exists((yyvsp[-3].sval))){
             Symbol s;
@@ -1177,11 +1201,11 @@ yyreduce:
             code_out << (yyvsp[-3].sval) << " = " << (yyvsp[-1].expr)->code << ";\n";
         }
     }
-#line 1181 "src/parser.tab.cpp"
+#line 1205 "src/parser.tab.cpp"
     break;
 
   case 11: /* assignment: IDENTIFIER ASSIGN STRING SEMICOLON  */
-#line 95 "src/parser.y"
+#line 102 "src/parser.y"
                                         {
 
         if(!symbolTable.exists((yyvsp[-3].sval))){
@@ -1199,20 +1223,20 @@ yyreduce:
             code_out << (yyvsp[-3].sval) << " = makeString(" << (yyvsp[-1].sval) << "\");\n";
         }
     }
-#line 1203 "src/parser.tab.cpp"
+#line 1227 "src/parser.tab.cpp"
     break;
 
   case 12: /* expression: NUMBER  */
-#line 115 "src/parser.y"
+#line 122 "src/parser.y"
             {
         (yyval.expr) = new Expression();
         (yyval.expr)->code = "makeInt(" + std::to_string((yyvsp[0].ival)) + ")";
     }
-#line 1212 "src/parser.tab.cpp"
+#line 1236 "src/parser.tab.cpp"
     break;
 
   case 13: /* expression: IDENTIFIER  */
-#line 119 "src/parser.y"
+#line 126 "src/parser.y"
                 {
         Symbol* s = symbolTable.get((yyvsp[0].sval));
 
@@ -1223,38 +1247,39 @@ yyreduce:
         (yyval.expr) = new Expression();
         (yyval.expr)->code = (yyvsp[0].sval);
     }
-#line 1227 "src/parser.tab.cpp"
+#line 1251 "src/parser.tab.cpp"
     break;
 
   case 14: /* expression: expression PLUS expression  */
-#line 129 "src/parser.y"
+#line 136 "src/parser.y"
                                 {
         (yyval.expr) = new Expression();
         (yyval.expr)->code = "(" + (yyvsp[-2].expr)->code + " + " + (yyvsp[0].expr)->code + ")";
     }
-#line 1236 "src/parser.tab.cpp"
+#line 1260 "src/parser.tab.cpp"
     break;
 
   case 15: /* expression: expression MINUS expression  */
-#line 133 "src/parser.y"
+#line 140 "src/parser.y"
                                  {
         (yyval.expr) = new Expression();
         (yyval.expr)->code = "(" + (yyvsp[-2].expr)->code + " - " + (yyvsp[0].expr)->code + ")";
     }
-#line 1245 "src/parser.tab.cpp"
+#line 1269 "src/parser.tab.cpp"
     break;
 
   case 18: /* expression: LPAREN expression RPAREN  */
-#line 139 "src/parser.y"
+#line 146 "src/parser.y"
                               {
         (yyval.expr) = (yyvsp[-1].expr);
     }
-#line 1253 "src/parser.tab.cpp"
+#line 1277 "src/parser.tab.cpp"
     break;
 
   case 19: /* print_statement: PRINT LPAREN STRING RPAREN SEMICOLON  */
-#line 146 "src/parser.y"
+#line 153 "src/parser.y"
       {
+        std::cout << "print rule" << std::endl;
         Symbol* s = symbolTable.get((yyvsp[-2].sval));
         code_out << "printValue(makeString(\"" << (yyvsp[-2].sval) << ");\n";
 
@@ -1265,19 +1290,19 @@ yyreduce:
 
         code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
       }
-#line 1269 "src/parser.tab.cpp"
+#line 1294 "src/parser.tab.cpp"
     break;
 
   case 20: /* print_statement: PRINT LPAREN IDENTIFIER RPAREN SEMICOLON  */
-#line 158 "src/parser.y"
+#line 166 "src/parser.y"
                                               {
        code_out << "printValue(" << (yyvsp[-2].sval) << ");\n";
     }
-#line 1277 "src/parser.tab.cpp"
+#line 1302 "src/parser.tab.cpp"
     break;
 
 
-#line 1281 "src/parser.tab.cpp"
+#line 1306 "src/parser.tab.cpp"
 
       default: break;
     }
@@ -1470,4 +1495,4 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 163 "src/parser.y"
+#line 171 "src/parser.y"
