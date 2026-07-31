@@ -67,18 +67,20 @@ block
     : LBRACE
     {
         symbolTable.enterScope();
+        code_out << "{\n";
     }
     statements
     RBRACE
     {
         symbolTable.exitScope();
+        code_out << "}\n";
     }
     ;
 
 assignment
     : IDENTIFIER ASSIGN expression
     {
-        if(!symbolTable.exists($1)){
+        if(!symbolTable.existsCurrentScope($1)){
             Symbol s;
             s.type = "int";
             s.data = $3->code;
@@ -95,7 +97,7 @@ assignment
     }
     | IDENTIFIER ASSIGN STRING{
 
-        if(!symbolTable.exists($1)){
+        if(!symbolTable.existsCurrentScope($1)){
             Symbol s;
             s.type = "string";
             s.data = $3;

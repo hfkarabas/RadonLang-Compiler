@@ -37,3 +37,7 @@ void SymbolTable::exitScope(){
         scopes.pop_back();
     }
 }
+
+bool SymbolTable::existsCurrentScope(const std::string& name){
+    return scopes.back().symbols.find(name) != scopes.back().symbols.end();
+}
