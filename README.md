@@ -13,8 +13,9 @@ RadonLang Compiler is an experimental compiler project written in C++, using Fle
 - Lexical Scope Management
 - Variable Shadowing
 - Arithmetic and String Operations
-- Automatic variable declaration
-- Semantic analysis
+- Automatic variable Declaration
+- Global Variable Support
+- Semantic Analysis
 - Error Detection
 - Runtime Type System
 - Command-line Compiler
@@ -25,15 +26,18 @@ RadonLang Compiler is an experimental compiler project written in C++, using Fle
 ## Example Syntax
 - x = "Age "
 - y = 25
+- GLOBAL z = 40
 -
 - {
 -     x = "Year "
 -     y = 2026
 -     SAY: x + y
+-     SAY: z
 - }
 
 - SAY: x + y
 
 - Output: 
 - Year 2026
+- 40
 - Age 25
