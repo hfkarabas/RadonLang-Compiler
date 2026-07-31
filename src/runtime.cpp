@@ -29,7 +29,19 @@ void printValue(const Value& value){
 }
 
 Value operator+(const Value& a, const Value& b){
-    return makeInt(a.intValue + b.intValue);
+    if(a.type == ValueType::INT && b.type == ValueType::INT)
+        return makeInt(a.intValue + b.intValue);
+
+    if(a.type == ValueType::STRING && b.type == ValueType::STRING)
+        return makeString(a.stringValue + b.stringValue);
+
+    if(a.type == ValueType::STRING && b.type == ValueType::INT)
+        return makeString(a.stringValue + std::to_string(b.intValue));
+
+    if(a.type == ValueType::INT && b.type == ValueType::STRING)
+        return makeString(std::to_string(a.intValue) + b.stringValue);
+
+    throw std::runtime_error("invalid operands for +");
 }
 
 Value operator-(const Value& a, const Value& b){
