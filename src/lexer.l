@@ -50,6 +50,7 @@ return LPAREN; }
 "++" {return INC;}
 "--" {return DEC;}
 "SAY" {return SAY;}
+"GLOBAL" {return GLOBAL;}
 ":" {return COLON;}
 \"([^\\\"]|\\.)*\" {
     yytext[yyleng - 1] = '\0';

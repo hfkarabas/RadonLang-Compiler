@@ -14,7 +14,9 @@ class SymbolTable{
 
         bool exists(const std::string& name);
         bool existsCurrentScope(const std::string& name);
+        bool existsGlobal(const std::string& name);
         void add(const std::string& name, const Symbol& symbol);
+        void addGlobal(const std::string& name, const Symbol& symbol);
         Symbol* get(const std::string& name);
 
         struct Scope{

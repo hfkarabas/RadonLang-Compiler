@@ -55,3 +55,27 @@ Value operator*(const Value& a, const Value& b){
 Value operator/(const Value& a, const Value& b){
     return makeInt(a.intValue / b.intValue);
 }
+
+Value operator==(const Value& a, const Value& b){
+    return makeInt(a.intValue == b.intValue);
+}
+
+Value operator!=(const Value& a, const Value& b){
+    return makeInt(a.intValue != b.intValue);
+}
+
+Value operator<(const Value& a, const Value& b){
+    return makeInt(a.intValue < b.intValue);
+}
+
+Value operator>(const Value& a, const Value& b){
+    return makeInt(a.intValue > b.intValue);
+}
+
+Value operator<=(const Value& a, const Value& b){
+    return makeInt(a.intValue <= b.intValue);
+}
+
+Value operator>=(const Value& a, const Value& b){
+    return makeInt(a.intValue >= b.intValue);
+}

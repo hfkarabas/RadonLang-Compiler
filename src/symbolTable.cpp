@@ -8,9 +8,17 @@ bool SymbolTable::exists(const std::string& name){
     }
     return false;
 }
+    
+bool SymbolTable::existsGlobal(const std::string& name){
+    return scopes.front().symbols.find(name) != scopes.front().symbols.end();
+}
 
 void SymbolTable::add(const std::string& name, const Symbol& symbol){
     scopes.back().symbols[name] = symbol;
+}
+
+void SymbolTable::addGlobal(const std::string& name, const Symbol& symbol){
+    scopes.front().symbols[name] = symbol;
 }
 
 Symbol* SymbolTable::get(const std::string& name){

@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cerrno>
+#include <sstream>
 
 #include "utils/utils.h"
 #include "cli/radoncli.h"
@@ -13,7 +14,8 @@
 SymbolTable symbolTable;
 
 extern FILE *yyin;
-std::ofstream code_out;
+std::ostringstream global_out;
+std::ostringstream code_out;
 
 extern int yyparse();
 
@@ -76,26 +78,36 @@ int main(int argc, char *argv[])
         }
         std::filesystem::path tempFile = "src/temp_out.cpp";
 
-    code_out.open(tempFile);
-   
-
-    if (!code_out){
-        printSystemError("Failed to create temp file.");
-        fclose(yyin);
-        return 1;
-    }
-
-    code_out 
-    <<"#include <stdio.h>\n"
-    <<"#include <stdlib.h>\n"
-    <<"#include \"runtime.h\"\n\n"
-    <<"int main()\n"
-    <<"{\n";
-    
     int parseResult = yyparse();
 
+    std::ofstream output(tempFile);
+
+    if (!output){
+    printSystemError("Failed to create temp file.");
+    fclose(yyin);
+    return 1;
+    }
+
+    output 
+    <<"#include <stdio.h>\n"
+    <<"#include <stdlib.h>\n"
+    <<"#include \"runtime.h\"\n\n";
+
+    output << global_out.str();
+
+    output
+    <<"int main()\n"
+    <<"{\n";
+
+    output << code_out.str();
+
+    output
+    << "\nreturn 0;\n"
+    << "}\n";
+
+    output.close();
+
     if(parseResult != 0){
-            code_out.close();
             fclose(yyin);
             printError("Compilation Failed");
             return 1;
@@ -105,7 +117,6 @@ int main(int argc, char *argv[])
             << "\nreturn 0;\n"
             << "}\n";
 
-        code_out.close();
         fclose(yyin);
 
     std::string command = "g++ -I. \"" + tempFile.string() + "\" src/runtime.cpp -o \"" + outputPath.string() +"\"";
