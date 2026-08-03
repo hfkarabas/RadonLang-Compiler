@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
         std::filesystem::path tempFile = "src/temp_out.cpp";
 
     int parseResult = yyparse();
-
+    
     std::ofstream output(tempFile);
 
     if (!output){

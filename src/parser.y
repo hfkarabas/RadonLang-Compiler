@@ -117,11 +117,6 @@ assignment
             s->data = $3->code;
 
             code_out << "Value " << $1 << " = " << $3->code << ";\n";
-        } else if (symbolTable.existsGlobal($1)){
-            Symbol* s = symbolTable.get($1);
-            s->data = $3->code;  
-
-            code_out << "Value " << $1 << " = " << $3->code << ";\n";
         } else {
             Symbol s;
             s.type = "int";
@@ -137,19 +132,16 @@ assignment
             Symbol* s = symbolTable.get($1);
             s->data = $3;
 
-            code_out << $1 << " = makeString(\"" << $3 << ";\n";
-        } else if (symbolTable.existsGlobal($1)){
-            Symbol* s = symbolTable.get($1);
-            s->data = $3;  
+            code_out << $1 << " = makeString(\"" << $3 << "\");\n";
 
-            code_out << $1 << " = makeString(\"" << $3 << ";\n";
+            code_out << $1 << " = makeString(\"" << $3 << "\");\n";
         } else {
             Symbol s;
             s.type = "string";
             s.data = $3;
             symbolTable.add($1,s);
 
-            code_out << "Value " << $1 << " = makeString(\"" << $3 << ";\n";
+            code_out << "Value " << $1 << " = makeString(\"" << $3 << "\");\n";
         }
     }
     ;
