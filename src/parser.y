@@ -160,6 +160,10 @@ expression
         $$ = new Expression();
         $$->code = $1;
     }
+    | STRING{
+        $$ = new Expression();
+        $$->code = "makeString(\"" + std::string($1) + "\")";
+    }
     | expression PLUS expression{
         $$ = new Expression();
         $$->code = "(" + $1->code + " + " + $3->code + ")";
@@ -174,7 +178,7 @@ expression
     }
     | expression DIVIDE expression{
         $$ = new Expression();
-        $$->code = "(" + $1->code + " . " + $3->code + ")";
+        $$->code = "(" + $1->code + " / " + $3->code + ")";
     }
     | expression EQUAL expression{
         $$ = new Expression();
@@ -206,12 +210,7 @@ expression
     ;
 
 print_statement
-    : SAY COLON STRING
-        {
-        code_out << "printValue(makeString(\"" << $3 << "\"));\n";
-    }
-
-    | SAY COLON expression
+    : SAY COLON expression
         {
         code_out << "printValue(" << $3->code << ");\n";
     }
