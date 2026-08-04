@@ -28,20 +28,34 @@ void printValue(const Value& value){
     }
 }
 
+BinaryType getBinaryType(ValueType a, ValueType b){
+    if (a == ValueType::INT && b == ValueType::INT)
+        return BinaryType::INT_INT;
+    if (a == ValueType::INT && b == ValueType::STRING)
+        return BinaryType::INT_STRING;
+    if (a == ValueType::STRING && b == ValueType::INT)
+        return BinaryType::STRING_INT;
+    if (a == ValueType::STRING && b == ValueType::STRING)
+        return BinaryType::STRING_STRING;
+
+        return BinaryType::INVALID;
+}
+
 Value operator+(const Value& a, const Value& b){
-    if(a.type == ValueType::INT && b.type == ValueType::INT)
-        return makeInt(a.intValue + b.intValue);
 
-    if(a.type == ValueType::STRING && b.type == ValueType::STRING)
-        return makeString(a.stringValue + b.stringValue);
+    switch (getBinaryType(a.type, b.type)){
+        case BinaryType::INT_INT:
+            return makeInt(a.intValue + b.intValue);
+        case BinaryType::STRING_STRING:
+            return makeString(a.stringValue + b.stringValue);
+        case BinaryType::INT_STRING:
+            return makeString(std::to_string(a.intValue) + b.stringValue);
+        case BinaryType::STRING_INT:
+            return makeString(a.stringValue + std::to_string(b.intValue));
 
-    if(a.type == ValueType::STRING && b.type == ValueType::INT)
-        return makeString(a.stringValue + std::to_string(b.intValue));
-
-    if(a.type == ValueType::INT && b.type == ValueType::STRING)
-        return makeString(std::to_string(a.intValue) + b.stringValue);
-
-    throw std::runtime_error("invalid operands for +");
+        default:
+            throw std::runtime_error("Invalid operands for +");
+    }
 }
 
 Value operator-(const Value& a, const Value& b){

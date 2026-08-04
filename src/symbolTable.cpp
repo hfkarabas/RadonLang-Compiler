@@ -25,8 +25,6 @@ void SymbolTable::add(const std::string& name, const Symbol& symbol){
 
 void SymbolTable::addGlobal(const std::string& name, const Symbol& symbol){
     scopes.front().symbols[name] = symbol;
-    std::cout << "ADD" << name << std::endl;
-    std:: cout << "scope size" << scopes.size() << std::endl;
 }
 
 Symbol* SymbolTable::get(const std::string& name){

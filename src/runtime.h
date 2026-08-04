@@ -28,3 +28,11 @@ Value operator<(const Value& a, const Value& b);
 Value operator>(const Value& a, const Value& b);
 Value operator<=(const Value& a, const Value& b);
 Value operator>=(const Value& a, const Value& b);
+
+enum class BinaryType{
+    INT_INT,
+    INT_STRING,
+    STRING_INT,
+    STRING_STRING,
+    INVALID
+};
